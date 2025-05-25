@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>阳.</title>
+    <title>吴锦阳自制小网站</title>
     <style>
         /* 修改目录栏位置 */
         .sidebar {
@@ -17,6 +17,47 @@
             border-radius: 0 5px 5px 0;
             z-index: 1000;
             padding: 15px 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* 更平滑的动画曲线 */
+        }
+        .sidebar.collapsed {
+            left: -180px;  /* 向左收起 */
+        }
+        .sidebar.collapsed::after {
+            content: "";
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 30px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 0 5px 5px 0;
+            animation: bounce 5s ease 0.5s 1 normal forwards;  /* 弹跳动画改为5秒 */
+        }
+        /* 删除以下这段代码 */
+        /* .sidebar.collapsed::before {
+            content: ">";
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 0 5px 5px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1001;
+        } */
+        @keyframes bounce {
+            0% { right: -10px; }
+            20% { right: -20px; }
+            40% { right: -5px; }
+            60% { right: -15px; }
+            80% { right: -7px; }
+            100% { right: -10px; }
         }
         .sidebar-item {
             padding: 10px 15px;
@@ -51,20 +92,14 @@
             padding: 0;
             background-color: #f5f5f5;
         }
-        /* 修改指定行的文字颜色为黑色 */
-        .resource-item:nth-child(1) h3,
-        .resource-item:nth-child(1) p,
-        .resource-item:nth-child(2) h3,
-        .resource-item:nth-child(2) p,
-        .resource-item:nth-child(3) h3,
-        .resource-item:nth-child(3) p,
-        .resource-item:nth-child(4) h3,
-        .resource-item:nth-child(4) p,
-        .resource-item:nth-child(5) h3,
-        .resource-item:nth-child(5) p,
-        .resource-item:nth-child(6) h3,
-        .resource-item:nth-child(6) p {
-            color: black;  /* 修改为黑色 */
+        /* 修改所有资源项的文字颜色 - 标题黑色，描述红色 */
+        .resource-item h3 {
+            color: black;  /* 所有标题保持黑色 */
+        }
+        .resource-item p {
+            color: red;  /* 所有描述改为红色 */
+            font-weight: bold;  /* 加粗 */
+            font-size: 18px;  /* 从16px增大到18px */
         }
         .container {
             width: 80%;
@@ -108,7 +143,7 @@
     </style>
 </head>
 <body>
-    <!-- 新增目录栏 -->
+    <!-- 修改后的目录栏和新增的收起按钮 -->
     <div class="sidebar">
         <div class="sidebar-item" data-description="PE制作和Windows 11 ISO工具" onclick="document.getElementById('tool-0').scrollIntoView({behavior: 'smooth'})">0 PE制作...</div>
         <div class="sidebar-item" data-description="系统优化工具合集" onclick="document.getElementById('tool-A').scrollIntoView({behavior: 'smooth'})">A 优化工具</div>
@@ -124,6 +159,7 @@
         <div class="sidebar-item" data-description="手机APK文件" onclick="document.getElementById('tool-K').scrollIntoView({behavior: 'smooth'})">K APK文件</div>
     </div>
 
+    <div class="toggle-sidebar" onclick="toggleSidebar()"></div>
     <header>
         <div style="position: absolute; left: 20px; top: 20px;">
             <img src="./头像.jpg" alt="头像" style="width: 150px; height: 150px; border-radius: 50%;">
@@ -200,19 +236,89 @@
         <!-- 新增视频和说明部分 -->
         <div style="text-align: center; margin-top: 40px;">
             <video width="80%" controls style="margin-bottom: 15px;">
-                <source src="./本世纪四大幻神 · 电影.mp4" type="video/mp4">
+                <source src="./《白雪公主和七个大高个》.mp4" type="video/mp4">
                 您的浏览器不支持HTML5视频
             </video>
-            <p style="font-size: 16px; color: #666; font-weight: bold; font-style: italic;">本世纪四大幻神 · 视频，以供缓解一下您一天的疲惫</p>
+            <p style="font-size: 16px; color: #666; font-weight: bold; font-style: italic;">#猎奇 #抽象 #白雪公主和七个大高个 </p>
             
             <!-- 新增图片和右侧描述 -->
             <div style="display: flex; align-items: center; justify-content: center; margin-top: 30px;">
                 <img src="./吴锦阳.jpg" alt="我的微信名片" style="width: 200px; height: auto; margin-right: 20px;">
                 <div style="text-align: left; max-width: 400px;">
-                    <p style="font-size: 16px; color: #666; font-weight: bold; font-style: italic;">这是我的微信二维码，如需联系请扫码添加</p>
+                    <p style="font-size: 16px; color: #666; font-weight: bold; font-style: italic;">这是我的微信二维码，要联系我请扫码添加</p>
                 </div>
             </div>
         </div>
     </div>
 </body>
 </html>
+
+<style>
+    /* 修改收起/展开按钮为方形样式 */
+    .toggle-sidebar {
+        position: fixed;
+        left: 0px;
+        top: 27%;
+        transform: translateY(-50%);
+        width: 30px;
+        height: 30px;
+        background: rgba(255,255,255,0.9);
+        border-radius: 0 5px 5px 0;
+        z-index: 1001;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .toggle-sidebar::after {
+        content: "<";  /* 初始状态显示"<" */
+        transition: all 0.3s ease;
+    }
+    .sidebar.collapsed + .toggle-sidebar::after {
+        content: ">";  /* 收起状态显示">" */
+    }
+    .toggle-sidebar::before {
+        content: "收起导航栏";
+        position: absolute;
+        left: 40px;
+        white-space: nowrap;
+        font-size: 16px;
+        color: #000000;
+        font-weight: bold;
+        opacity: 1;
+        transform: translateY(0);
+        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* 从0.5s改为0.3s */
+    }
+    .sidebar.collapsed + .toggle-sidebar::before {
+        content: "展开导航栏";
+        transform: translateY(20px);
+    }
+    .toggle-sidebar:hover::before {
+        opacity: 0.8;
+    }
+    .sidebar:not(.collapsed) + .toggle-sidebar::before {
+        animation: slideUp 0.3s ease forwards;
+    }
+    .sidebar.collapsed + .toggle-sidebar::before {
+        animation: slideDown 0.3s ease forwards;
+    }
+    @keyframes slideUp {
+        0% { transform: translateY(20px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes slideDown {
+        0% { transform: translateY(-20px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+    }
+</style>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.classList.toggle('collapsed');
+        void sidebar.offsetWidth; // 强制重绘
+    }
+</script>
