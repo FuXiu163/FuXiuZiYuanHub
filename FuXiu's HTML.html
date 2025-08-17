@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FuXiu自制小网站</title>
+    <style>
+        /* 修改目录栏位置 */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 62%;  /* 从60%调整为62% */
+            transform: translateY(-50%);
+            width: 180px;
+            background: rgba(255,255,255,0.9);
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            border-radius: 0 5px 5px 0;
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* 更平滑的动画曲线 */
+        }
+        .sidebar.collapsed {
+            left: -180px;  /* 向左收起 */
+        }
+        .sidebar.collapsed::after {
+            content: "";
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 30px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 0 5px 5px 0;
+            animation: bounce 5s ease 0.5s 1 normal forwards;  /* 弹跳动画改为5秒 */
+        }
+        /* 删除以下这段代码 */
+        /* .sidebar.collapsed::before {
+            content: ">";
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 0 5px 5px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1001;
+        } */
+        @keyframes bounce {
+            0% { right: -10px; }
+            20% { right: -20px; }
+            40% { right: -5px; }
+            60% { right: -15px; }
+            80% { right: -7px; }
+            100% { right: -10px; }
+        }
+        .sidebar-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .sidebar-item:hover {
+            background: #f0f0f0;
+        }
+        .sidebar-item:hover::after {
+            content: attr(data-description);
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            white-space: nowrap;
+            margin-left: 10px;
+            font-size: 14px;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: '仿宋', 'Microsoft YaHei', sans-serif;
+            color: black;  /* 修改为黑色 */
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        /* 修改所有资源项的文字颜色 - 标题黑色，描述红色 */
+        .resource-item h3 {
+            color: black;  /* 所有标题保持黑色 */
+        }
+        .resource-item p {
+            color: red;  /* 所有描述改为红色 */
+            font-weight: bold;  /* 加粗 */
+            font-size: 18px;  /* 从16px增大到18px */
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background: #4285f4;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .resource-category {
+            background: white;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .resource-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .resource-item:last-child {
+            border-bottom: none;
+        }
+        .download-btn {
+            background: #4285f4;
+            color: white;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        header p {
+            font-size: 30px;
+        }
+        header h1 {
+            font-size: 50px;
+        }
+    </style>
+    <link rel="icon" href="./头像.jpg" type="image/jpeg">
+</head>
+<body>
+    <!-- 修改后的目录栏和新增的收起按钮 -->
+    <!-- 删除以下这段代码 -->
+    <!-- 在侧边导航栏底部添加 -->
+    <div class="sidebar">
+        <div class="sidebar-item" data-description="PE制作和Windows 11 ISO工具" onclick="document.getElementById('tool-0').scrollIntoView({behavior: 'smooth'})">0 PE制作...</div>
+        <div class="sidebar-item" data-description="系统优化工具合集" onclick="document.getElementById('tool-A').scrollIntoView({behavior: 'smooth'})">A 优化工具</div>
+        <div class="sidebar-item" data-description="桌面美化资源" onclick="document.getElementById('tool-B').scrollIntoView({behavior: 'smooth'})">B 桌面美化</div>
+        <div class="sidebar-item" data-description="系统激活和更新工具" onclick="document.getElementById('tool-C').scrollIntoView({behavior: 'smooth'})">C 系统必备</div>
+        <div class="sidebar-item" data-description="浏览器资源和插件" onclick="document.getElementById('tool-D').scrollIntoView({behavior: 'smooth'})">D 浏览器</div>
+        <div class="sidebar-item" data-description="U盘加密解锁工具" onclick="document.getElementById('tool-E').scrollIntoView({behavior: 'smooth'})">E U盘工具</div>
+        <div class="sidebar-item" data-description="常用软件合集" onclick="document.getElementById('tool-F').scrollIntoView({behavior: 'smooth'})">F 软件</div>
+        <div class="sidebar-item" data-description="办公软件插件" onclick="document.getElementById('tool-G').scrollIntoView({behavior: 'smooth'})">G 插件</div>
+        <div class="sidebar-item" data-description="创客比赛资源" onclick="document.getElementById('tool-H').scrollIntoView({behavior: 'smooth'})">H 创客</div>
+        <div class="sidebar-item" data-description="Windows实用工具" onclick="document.getElementById('tool-I').scrollIntoView({behavior: 'smooth'})">I Windows工具</div>
+        <div class="sidebar-item" data-description="编程开发软件" onclick="document.getElementById('tool-J').scrollIntoView({behavior: 'smooth'})">J 编程软件</div>
+        <div class="sidebar-item" data-description="手机APK文件" onclick="document.getElementById('tool-K').scrollIntoView({behavior: 'smooth'})">K APK文件</div>
+        <div class="sidebar-item" data-description="需要密码" onclick="window.location.href='密码页.html'">FuXiu的私密空间</div>
+    </div>
+
+    <div class="toggle-sidebar" onclick="toggleSidebar()"></div>
+    <header>
+        <div style="position: absolute; left: 20px; top: 20px;">
+            <img src="./头像.jpg" alt="头像" style="width: 150px; height: 150px; border-radius: 50%;">
+        </div>
+        <h1>FuXiu的资源</h1>
+        <p>阳.</p>
+    </header>
+    
+    <div class="container">
+        <div class="resource-category">
+            <h2>工具合集</h2>
+            <div class="resource-item" id="tool-0">
+                <h3>0 PE制作&Windows 11创建跳过TPM.2检测的iso文件</h3>
+                <p>如果有需要则下载！非必要</p>
+                <a href="https://www.123912.com/s/dwUvTd-657cv" class="download-btn" target="_blank">跳转至123云盘</a>
+            </div>
+            <div class="resource-item" id="tool-A">
+                <h3>A 优化工具</h3>
+                <p>建议系统安装完毕后首先使用里面的工具</p>
+                <a href="https://www.123912.com/s/dwUvTd-q57cv" class="download-btn" target="_blank">跳转至123云盘</a>
+            </div>
+            <div class="resource-item" id="tool-B">
+                <h3>B 桌面美化</h3>
+                <p>鼠标样式，壁纸等（壁纸还是推荐使用Steam端的Wallpaper）</p>
+                <a href="https://www.123912.com/s/dwUvTd-y57cv" class="download-btn" target="_blank">跳转至123云盘</a>
+            </div>
+            <div class="resource-item" id="tool-C">
+                <h3>C 装完系统必备</h3>
+                <p>系统激活、转换、禁用更新之类</p>
+                <a href="https://www.123912.com/s/dwUvTd-Tq7cv" class="download-btn" target="_blank">跳转至123云盘</a>
+            </div>
+            <div class="resource-item" id="tool-D">
+                <h3>D 浏览器</h3>
+                <p>浏览器资源，包括好用的浏览器网址和浏览器插件</p>
+                <a href="https://www.123912.com/s/dwUvTd-vq7cv" class="download-btn" target="_blank">跳转至123云盘</a>
+            </div>
+            <div class="resource-item" id="tool-E">
+                <h3>E U盘加密&解锁</h3>
+                <p>U盘加密和一键解锁，不推荐使用，可能导致系统崩溃、U盘损坏和重要文件丢失！</p>
+                <a href="https://www.123912.com/s/dwUvTd-dq7cv" class="download-btn" target="_blank">跳转至123云盘</a>
+            </div>
+            <div class="resource-item" id="tool-F">
+                <h3>F 软件</h3>
+                <p>包含常用软件及其它好用工具</p>
+                <a href="https://www.123912.com/s/dwUvTd-3q7cv" class="download-btn" target="_blank">跳转至123云盘</a>
+            </div>
+            <div class="resource-item" id="tool-G">
+                <h3>G 插件</h3>
+                <p>多为某些软件的破解版，包含办公软件的使用小插件，以辅助您办公</p>
+                <a href="https://www.123912.com/s/dwUvTd-hq7cv" class="download-btn" target="_blank">跳转至123云盘</a>
+            </div>
+            <div class="resource-item" id="tool-H">
+                <h3>H 创客</h3>
+                <p>如有参加创客比赛的都可以下载，是其驱动文件和软件主体</p>
+                <a href="https://www.123912.com/s/dwUvTd-Hq7cv" class="download-btn" target="_blank">跳转至123云盘</a>
+            </div>
+            <div class="resource-item" id="tool-I">
+                <h3>I Windows其它工具</h3>
+                <p>虚拟机创建、启动U盘制作等等</p>
+                <a href="https://www.123912.com/s/dwUvTd-Aq7cv" class="download-btn" target="_blank">跳转至123云盘</a>
+            </div>
+            <div class="resource-item" id="tool-J">
+                <h3>J 编程软件</h3>
+                <p>现有C语言、Python、Trae等编程用软件，有兴趣的可以下载试试看</p>
+                <a href="https://www.123912.com/s/dwUvTd-9q7cv" class="download-btn" target="_blank">跳转至123云盘</a>
+            </div>
+            <div class="resource-item" id="tool-K">
+                <h3>K APK文件</h3>
+                <p>手机的可以直接下载.apk文件，而电脑需要安装一个搭建apk运行环境，也就是里面的那两个模拟器，任选一个即可（另外FuXiu可能有点懒去更新里面那些APK的版本，有更新的话你们就更新吧！）</p>
+                <a href="https://www.123912.com/s/dwUvTd-Qq7cv" class="download-btn" target="_blank">跳转至123云盘</a>
+            </div>
+        </div>
+        
+        <!-- 新增视频和说明部分 -->
+        <div style="text-align: center; margin-top: 40px;">
+            <video width="60%" controls style="margin-bottom: 15px;">
+                <source src="./看完不笑的可以确诊抑郁症了.mp4" type="video/mp4">
+                您的浏览器不支持HTML5视频
+            </video>
+            <p style="font-size: 16px; color: #666; font-weight: bold; font-style: italic;">看完不笑的可以确诊抑郁症了</p>
+            
+            <!-- 新增图片和右侧描述 -->
+            <div style="display: flex; align-items: center; justify-content: center; margin-top: 30px;">
+                <img src="./吴锦阳.jpg" alt="我的微信名片" style="width: 200px; height: auto; margin-right: 20px;">
+                <div style="text-align: left; max-width: 400px;">
+                    <p style="font-size: 16px; color: #666; font-weight: bold; font-style: italic;">这是我的微信二维码，要联系我请扫码添加</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<style>
+    /* 修改收起/展开按钮为方形样式 */
+    .toggle-sidebar {
+        position: fixed;
+        left: 0px;
+        top: 27%;
+        transform: translateY(-50%);
+        width: 30px;
+        height: 30px;
+        background: rgba(255,255,255,0.9);
+        border-radius: 0 5px 5px 0;
+        z-index: 1001;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .toggle-sidebar::after {
+        content: "<";  /* 初始状态显示"<" */
+        transition: all 0.3s ease;
+    }
+    .sidebar.collapsed + .toggle-sidebar::after {
+        content: ">";  /* 收起状态显示">" */
+    }
+    .toggle-sidebar::before {
+        content: "收起导航栏";
+        position: absolute;
+        left: 40px;
+        white-space: nowrap;
+        font-size: 16px;
+        color: #000000;
+        font-weight: bold;
+        opacity: 1;
+        transform: translateY(0);
+        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* 从0.5s改为0.3s */
+    }
+    .sidebar.collapsed + .toggle-sidebar::before {
+        content: "展开导航栏";
+        transform: translateY(20px);
+    }
+    .toggle-sidebar:hover::before {
+        opacity: 0.8;
+    }
+    .sidebar:not(.collapsed) + .toggle-sidebar::before {
+        animation: slideUp 0.3s ease forwards;
+    }
+    .sidebar.collapsed + .toggle-sidebar::before {
+        animation: slideDown 0.3s ease forwards;
+    }
+    @keyframes slideUp {
+        0% { transform: translateY(20px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes slideDown {
+        0% { transform: translateY(-20px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+    }
+</style>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.classList.toggle('collapsed');
+        void sidebar.offsetWidth; // 强制重绘
+    }
+</script>
+
+<style>
+/* 添加样式确保新链接在底部 */
+.sidebar {
+display: flex;
+flex-direction: column;
+}
+.nav-item {
+margin-top: auto; /* 将最后一个项目推到最底部 */
+}
+</style>
