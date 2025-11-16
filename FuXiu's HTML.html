@@ -205,7 +205,7 @@
         <div class="sidebar-item" data-description="Windows实用工具" onclick="document.getElementById('tool-I').scrollIntoView({behavior: 'smooth'})">I Windows工具</div>
         <div class="sidebar-item" data-description="编程开发软件" onclick="document.getElementById('tool-J').scrollIntoView({behavior: 'smooth'})">J 编程软件</div>
         <div class="sidebar-item" data-description="手机APK文件" onclick="document.getElementById('tool-K').scrollIntoView({behavior: 'smooth'})">K APK文件</div>
-        <div class="sidebar-item" data-description="需要密码" onclick="window.location.href='密码页.html'">FuXiu的私密空间</div>
+        <div class="sidebar-item" data-description="需要密码验证" onclick="checkPassword()">FuXiu空间</div>
     </div>
 
     <div class="toggle-sidebar" onclick="toggleSidebar()"></div>
@@ -387,6 +387,17 @@
         const sidebar = document.querySelector('.sidebar');
         sidebar.classList.toggle('collapsed');
         void sidebar.offsetWidth; // 强制重绘
+    }
+
+    function checkPassword() {
+        const correctPassword = "fuxiu1313113";
+        const userPassword = prompt("请输入访问密码：");
+        
+        if (userPassword === correctPassword) {
+            window.open("https://fuxiu163.github.io/FuXiuZiYuanHub/%E7%A7%81%E5%AF%86%E9%A1%B5%E9%9D%A2.html", "_blank");
+        } else if (userPassword !== null) {
+            alert("密码错误！请重新输入。");
+        }
     }
 </script>
 
