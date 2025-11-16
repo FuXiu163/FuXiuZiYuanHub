@@ -140,6 +140,51 @@
         header h1 {
             font-size: 50px;
         }
+
+        /* PDF嵌入样式 */
+        .pdf-embed-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .pdf-embed-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        .pdf-embed-frame {
+            width: 100%;
+            height: 600px;
+            border: none;
+            display: block;
+        }
+
+        .pdf-download-fallback {
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-top: 1px solid #dee2e6;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #4285f4, #34a853);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(66, 133, 244, 0.4);
+            background: linear-gradient(45deg, #3367d6, #2d8f47);
+        }
     </style>
     <link rel="icon" href="./头像.jpg" type="image/jpeg">
 </head>
@@ -244,13 +289,30 @@
                 <source src="./看完不笑的可以确诊抑郁症了.mp4" type="video/mp4">
                 您的浏览器不支持HTML5视频
             </video>
-            <p style="font-size: 16px; color: #666; font-weight: bold; font-style: italic;">看完不笑的可以确诊抑郁症了</p>
+            <p style="font-size: 16px; color: #666; font-weight: bold; font-style: italic;">佛祖陪你笑这一块/.</p>
             
             <!-- 新增图片和右侧描述 -->
             <div style="display: flex; align-items: center; justify-content: center; margin-top: 30px;">
                 <img src="./吴锦阳.jpg" alt="我的微信名片" style="width: 200px; height: auto; margin-right: 20px;">
                 <div style="text-align: left; max-width: 400px;">
-                    <p style="font-size: 16px; color: #666; font-weight: bold; font-style: italic;">这是我的微信二维码，要联系我请扫码添加</p>
+                    <p style="font-size: 16px; color: #666; font-weight: bold; font-style: italic;">FuXiu</p>
+                </div>
+            </div>
+            
+            <!-- PDF文件嵌入部分 -->
+            <div id="pdf-embed-section" style="margin-top: 40px; text-align: center;">
+                <h2 style="margin-bottom: 20px;">LX Music的下载安装与配置</h2>
+                <div class="pdf-embed-container" style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; background: white;">
+                    <iframe src="LX Music的下载安装与配置 - FuXiu.pdf" 
+                            style="width: 100%; height: 600px; border: none;"
+                            title="LX Music的下载安装与配置">
+                        <p>您的浏览器不支持PDF预览。<a href="LX Music的下载安装与配置 - FuXiu.pdf" download>点击下载PDF文件</a></p>
+                    </iframe>
+                    <div class="pdf-download-fallback" style="margin-top: 15px;">
+                        <a href="LX Music的下载安装与配置 - FuXiu.pdf" download class="download-btn" style="display: inline-block; padding: 10px 20px; background: #4285f4; color: white; text-decoration: none; border-radius: 5px;">
+                            下载PDF文件
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -339,4 +401,3 @@ margin-top: auto; /* 将最后一个项目推到最底部 */
 }
 
 </style>
-
