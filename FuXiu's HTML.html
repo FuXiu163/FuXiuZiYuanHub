@@ -126,14 +126,7 @@
         .resource-item:last-child {
             border-bottom: none;
         }
-        .download-btn {
-            background: #4285f4;
-            color: white;
-            padding: 5px 10px;
-            text-decoration: none;
-            border-radius: 3px;
-            font-size: 14px;
-        }
+        /* 旧的下载按钮样式已被新样式替换 */
         header p {
             font-size: 30px;
         }
@@ -170,20 +163,43 @@
 
         .download-btn {
             display: inline-block;
-            padding: 12px 24px;
-            background: linear-gradient(45deg, #4285f4, #34a853);
+            padding: 8px 16px;
+            width: 90px;
+            background-color: #4a90e2;
             color: white;
             text-decoration: none;
-            border-radius: 25px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+            border-radius: 6px;
+            font-weight: 400;
+            font-size: 13px;
+            text-align: center;
+            transition: background-color 0.2s ease;
+            border: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
         }
 
         .download-btn:hover {
+            background-color: #357abd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .download-btn:hover::before {
+            left: 100%;
+        }
+
+        .download-btn:active {
             transform: translateY(-1px);
-            box-shadow: 0 4px 16px rgba(66, 133, 244, 0.4);
-            background: linear-gradient(45deg, #3367d6, #2d8f47);
+            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.5);
         }
     </style>
     <link rel="icon" href="./头像.jpg" type="image/jpeg">
@@ -214,7 +230,7 @@
             <img src="./头像.jpg" alt="头像" style="width: 150px; height: 150px; border-radius: 50%;">
         </div>
         <h1>FuXiu的资源</h1>
-        <p>资源分享这一块/.</p>
+        <div id="current-time" style="font-size: 24px; margin-top: 15px; font-family: KaiTi, '楷体', STKaiti, '华文楷体', serif;"></div>
     </header>
     
     <div class="container">
@@ -283,31 +299,18 @@
             </div>
         </div>
         
-        <!-- 新增视频和说明部分 -->
-        <div style="text-align: center; margin-top: 40px;">
-            <video width="60%" controls style="margin-bottom: 15px;">
-                <source src="./看完不笑的可以确诊抑郁症了.mp4" type="video/mp4">
-                您的浏览器不支持HTML5视频
-            </video>
-            <p style="font-size: 16px; color: #666; font-weight: bold; font-style: italic;">佛祖陪你笑这一块/.</p>
-            
-            <!-- 新增图片和右侧描述 -->
-            <div style="display: flex; align-items: center; justify-content: center; margin-top: 30px;">
-                <img src="./吴锦阳.jpg" alt="我的微信名片" style="width: 200px; height: auto; margin-right: 20px;">
-                <div style="text-align: left; max-width: 400px;">
-                    <p style="font-size: 16px; color: #666; font-weight: bold; font-style: italic;">FuXiu</p>
-                </div>
-            </div>
+
             
             <!-- PDF文件嵌入部分 -->
             <div id="pdf-embed-section" style="margin-top: 40px; text-align: center;">
                 <h2 style="margin-bottom: 20px;">LX Music的下载安装与配置</h2>
                 <div class="pdf-embed-container" style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; background: white;">
-                    <iframe src="LX Music的下载安装与配置 - FuXiu.pdf" 
+                    <object data="LX Music的下载安装与配置 - FuXiu.pdf" 
+                            type="application/pdf"
                             style="width: 100%; height: 600px; border: none;"
                             title="LX Music的下载安装与配置">
-                        <p>您的浏览器不支持PDF预览。<a href="LX Music的下载安装与配置 - FuXiu.pdf" download>点击下载PDF文件</a></p>
-                    </iframe>
+                        <p>您的浏览器不支持PDF预览。<a href="LX Music的下载安装与配置 - FuXiu.pdf" target="_blank">点击查看PDF文件</a></p>
+                    </object>
                     <div class="pdf-download-fallback" style="margin-top: 15px;">
                         <a href="LX Music的下载安装与配置 - FuXiu.pdf" download class="download-btn" style="display: inline-block; padding: 10px 20px; background: #4285f4; color: white; text-decoration: none; border-radius: 5px;">
                             下载PDF文件
@@ -317,6 +320,79 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // 获取实时时间并精确到秒
+        let userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        let timeZoneName = userTimezone;
+        
+        function updateTime(timeZone = userTimezone) {
+            const now = new Date();
+            const formattedTime = now.toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false,
+                timeZone: timeZone
+            });
+            // 显示时间和时区信息
+            document.getElementById('current-time').textContent = `${formattedTime} 正在为您使用${timeZoneName}时区`;
+        }
+        
+        // 获取用户时区
+        function getUserTimezone() {
+            // 首先尝试使用浏览器默认时区
+            updateTime();
+            
+            // 然后尝试获取用户的地理位置来确定准确时区
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const { latitude, longitude } = position.coords;
+                        
+                        // 使用第三方API获取时区信息
+                        fetch(`https://ipapi.co/${latitude},${longitude}/json/`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.timezone) {
+                                    userTimezone = data.timezone;
+                                    timeZoneName = data.timezone;
+                                    updateTime(userTimezone);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('获取时区信息失败:', error);
+                                // 如果API请求失败，切换到北京时区
+                                userTimezone = 'Asia/Shanghai';
+                                timeZoneName = '北京';
+                                updateTime(userTimezone);
+                            });
+                    },
+                    (error) => {
+                        console.error('获取地理位置失败:', error);
+                        // 如果获取地理位置失败，切换到北京时区
+                        userTimezone = 'Asia/Shanghai';
+                        timeZoneName = '北京';
+                        updateTime(userTimezone);
+                    }
+                );
+            } else {
+                console.error('浏览器不支持Geolocation API');
+                // 如果浏览器不支持地理定位，使用北京时区
+                userTimezone = 'Asia/Shanghai';
+                timeZoneName = '北京';
+                updateTime(userTimezone);
+            }
+        }
+        
+        // 页面加载时初始化
+        updateTime();
+        setInterval(updateTime, 1000);
+        getUserTimezone();
+    </script>
 </body>
 </html>
 
@@ -426,7 +502,7 @@
         modal.innerHTML = `
             <div style="margin-bottom: 20px;">都说暂停下载了</div>
             <div>你盐精虾嘛？</div>
-            <img src="./嘿嘿嘿.gif" alt="嘿嘿嘿" style="width: 150px; height: auto; margin: 20px 0; border-radius: 5px;">
+            <img src="./行.png" alt="行" style="width: 150px; height: auto; margin: 20px 0; border-radius: 5px;">
             <div id="countdown" style="position: absolute; bottom: 10px; right: 15px; color: blue; font-size: 16px; font-family: '微软雅黑', 'Microsoft YaHei', sans-serif;">5s</div>
         `;
         
