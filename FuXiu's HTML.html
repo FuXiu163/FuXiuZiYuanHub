@@ -344,10 +344,32 @@
         
         // 获取用户时区
         function getUserTimezone() {
-            // 首先尝试使用浏览器默认时区
-            updateTime();
+            // 检查localStorage中是否有保存的地理位置授权信息和时区
+            const savedLocationInfo = localStorage.getItem('locationPermissionInfo');
+            const now = new Date().getTime();
+            const expireTime = 24 * 60 * 60 * 1000; // 24小时过期
             
-            // 然后尝试获取用户的地理位置来确定准确时区
+            if (savedLocationInfo) {
+                const parsedInfo = JSON.parse(savedLocationInfo);
+                // 检查是否在有效期内
+                if (now - parsedInfo.timestamp < expireTime) {
+                    if (parsedInfo.granted) {
+                        // 如果用户之前授权了地理位置，直接使用保存的时区
+                        userTimezone = parsedInfo.timezone;
+                        timeZoneName = parsedInfo.timezoneName;
+                        updateTime(userTimezone);
+                        return; // 跳过后续的地理位置请求
+                    } else {
+                        // 如果用户之前拒绝了授权，直接使用北京时区
+                        userTimezone = 'Asia/Shanghai';
+                        timeZoneName = '北京';
+                        updateTime(userTimezone);
+                        return; // 跳过后续的地理位置请求
+                    }
+                }
+            }
+            
+            // 如果没有保存的信息或已过期，尝试获取用户的地理位置来确定准确时区
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
@@ -361,6 +383,14 @@
                                     userTimezone = data.timezone;
                                     timeZoneName = data.timezone;
                                     updateTime(userTimezone);
+                                    
+                                    // 保存授权信息到localStorage
+                                    localStorage.setItem('locationPermissionInfo', JSON.stringify({
+                                        granted: true,
+                                        timezone: userTimezone,
+                                        timezoneName: timeZoneName,
+                                        timestamp: new Date().getTime()
+                                    }));
                                 }
                             })
                             .catch(error => {
@@ -369,6 +399,14 @@
                                 userTimezone = 'Asia/Shanghai';
                                 timeZoneName = '北京';
                                 updateTime(userTimezone);
+                                
+                                // 保存失败信息到localStorage
+                                localStorage.setItem('locationPermissionInfo', JSON.stringify({
+                                    granted: true, // 用户授权了地理位置，但API请求失败
+                                    timezone: userTimezone,
+                                    timezoneName: timeZoneName,
+                                    timestamp: new Date().getTime()
+                                }));
                             });
                     },
                     (error) => {
@@ -377,6 +415,14 @@
                         userTimezone = 'Asia/Shanghai';
                         timeZoneName = '北京';
                         updateTime(userTimezone);
+                        
+                        // 保存拒绝授权信息到localStorage
+                        localStorage.setItem('locationPermissionInfo', JSON.stringify({
+                            granted: false,
+                            timezone: userTimezone,
+                            timezoneName: timeZoneName,
+                            timestamp: new Date().getTime()
+                        }));
                     }
                 );
             } else {
@@ -385,6 +431,14 @@
                 userTimezone = 'Asia/Shanghai';
                 timeZoneName = '北京';
                 updateTime(userTimezone);
+                
+                // 保存不支持信息到localStorage
+                localStorage.setItem('locationPermissionInfo', JSON.stringify({
+                    granted: false,
+                    timezone: userTimezone,
+                    timezoneName: timeZoneName,
+                    timestamp: new Date().getTime()
+                }));
             }
         }
         
